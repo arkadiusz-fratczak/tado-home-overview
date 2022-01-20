@@ -29,21 +29,32 @@
         <spock-bom.version>2.0-groovy-3.0</spock-bom.version>
         <gmavenplus-plugin.version>1.12.0</gmavenplus-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <byte-buddy.version>1.11.0</byte-buddy.version>
         <objenesis.version>3.2</objenesis.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>tado.challenge</groupId>
+                <groupId>tado.interview</groupId>
                 <artifactId>tado-home-overview-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>tado.challenge</groupId>
+                <groupId>tado.interview</groupId>
                 <artifactId>tado-home-overview-app</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+                <optional>true</optional>
             </dependency>
             <!-- test dependencies -->
             <dependency>

@@ -100,33 +100,33 @@ paths:
         '204':
           description: No content, resident added successfuly
           content: { }
-#    delete:
-#      tags:
-#        - home
-#      summary: Remove resident from home
-#      operationId: removeResident
-#      parameters:
-#        - name: homeId
-#          description: Identifier of home
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#        - name: userId
-#          description: Identifier of user to be removed from home
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#      requestBody:
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/Resident'
-#      responses:
-#        '204':
-#          description: No content, resident removed successfuly
-#          content: {}
+  #    delete:
+  #      tags:
+  #        - home
+  #      summary: Remove resident from home
+  #      operationId: removeResident
+  #      parameters:
+  #        - name: homeId
+  #          description: Identifier of home
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #        - name: userId
+  #          description: Identifier of user to be removed from home
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #      requestBody:
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/Resident'
+  #      responses:
+  #        '204':
+  #          description: No content, resident removed successfuly
+  #          content: {}
   /homes/{homeId}/rooms:
     post:
       tags:
@@ -178,28 +178,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedRoom'
-#    delete:
-#      tags:
-#        - home
-#      summary: Delete room
-#      operationId: deleteRoom
-#      parameters:
-#        - name: homeId
-#          description: Identifier of home
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#        - name: roomId
-#          description: Identifier of room
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#      responses:
-#        '204':
-#          description: No content, room removed successfuly
-#          content: { }
+  #    delete:
+  #      tags:
+  #        - home
+  #      summary: Delete room
+  #      operationId: deleteRoom
+  #      parameters:
+  #        - name: homeId
+  #          description: Identifier of home
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #        - name: roomId
+  #          description: Identifier of room
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #      responses:
+  #        '204':
+  #          description: No content, room removed successfuly
+  #          content: { }
   /homes/{homeId}/rooms/{roomId}/sensors/{sensorId}:
     put:
       tags:
@@ -229,40 +229,40 @@ paths:
         '204':
           description: No content, sensor added successfuly
           content: { }
-#    delete:
-#      tags:
-#        - home
-#      summary: Delete sensor from room
-#      operationId: removeSensor
-#      parameters:
-#        - name: homeId
-#          description: Identifier of home
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#        - name: roomId
-#          description: Identifier of room
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#        - name: sensorId
-#          description: Identifier of sensor
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#      responses:
-#        '204':
-#          description: No content, sensor removed successfuly
-#          content: { }
+  #    delete:
+  #      tags:
+  #        - home
+  #      summary: Delete sensor from room
+  #      operationId: removeSensor
+  #      parameters:
+  #        - name: homeId
+  #          description: Identifier of home
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #        - name: roomId
+  #          description: Identifier of room
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #        - name: sensorId
+  #          description: Identifier of sensor
+  #          in: path
+  #          required: true
+  #          schema:
+  #            type: integer
+  #      responses:
+  #        '204':
+  #          description: No content, sensor removed successfuly
+  #          content: { }
   /sensors:
     get:
       tags:
         - sensor
       summary: Get all sensors
-      operationId: getSensors
+      operationId: getAllSensors
       responses:
         '200':
           description: OK
@@ -271,7 +271,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Sensor'
+                  $ref: '#/components/schemas/SensorDTO'
     post:
       tags:
         - sensor
@@ -281,14 +281,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSensor'
+              $ref: '#/components/schemas/CreateSensorDTO'
       responses:
         '201':
           description: Sensor created successfuly
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sensor'
+                $ref: '#/components/schemas/SensorDTO'
   /sensors/{sensorId}:
     get:
       tags:
@@ -302,20 +302,21 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sensor'
+                $ref: '#/components/schemas/SensorDTO'
         '404':
           description: Sensor not found
           content: { }
     put:
       tags:
         - sensor
-      summary: Update sensor state
+      summary: Update value measured by sensor
       operationId: updateSensorState
       parameters:
         - name: sensorId
@@ -324,40 +325,51 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateSensor'
+              $ref: '#/components/schemas/UpdateSensorStateDTO'
       responses:
         '204':
           description: No content. Sensor updated successfuly
           content: {}
 components:
   schemas:
-    CreateSensor:
+    CreateSensorDTO:
       type: object
       properties:
-        sensorType:
+        valueType:
           type: string
+          description: Type of the measured value, eg. temperature, humidity
         unit:
           type: string
-    UpdateSensor:
+          description: Unit of the measured value, eg. CELCIUS, PERCENT
+    UpdateSensorStateDTO:
       type: object
       properties:
-        measuredValue:
+        value:
           type: number
-    Sensor:
+          format: float
+          description: Measured value
+    SensorDTO:
       type: object
       properties:
         sensorId:
           type: integer
-        sensorType:
+          format: int64
+          description: Identifier of sensor
+        valueType:
           type: string
-        measuredValue:
-          type: number
+          description: Type of the measured value, eg. temperature, humidity
         unit:
           type: string
+          description: Unit of the measured value
+        value:
+          type: number
+          format: float
+          description: Measured value
     Resident:
       type: object
       properties:
@@ -378,7 +390,7 @@ components:
         sensors:
           type: array
           items:
-            $ref: '#/components/schemas/Sensor'
+            $ref: '#/components/schemas/SensorDTO'
     CreateHome:
       type: object
       properties:
