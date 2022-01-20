@@ -1,0 +1,410 @@
+openapi: 3.0.1
+info:
+  title: Home overview API
+  description: Groups operations related with checking climate in home
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/home-overview/api
+tags:
+  - name: home
+    description: Operations related with home and room management
+  - name: sensor
+    description: Operations related with sensors managment, which are responsible for measuring
+      values like temperature, humidity etc.
+paths:
+  /homes:
+    get:
+      tags:
+        - home
+      summary: Get all homes associated with given resident id
+      operationId: getHomesByResidentId
+      parameters:
+        - name: residentId
+          description: Identifier of user - resident of home
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Home'
+        '404':
+          description: There isn't any home associated with the given resident
+          content: {}
+    post:
+      tags:
+        - home
+      summary: Create home
+      operationId: createHome
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHome'
+      responses:
+        '201':
+          description: Home created successfuly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedHome'
+  /homes/{homeId}:
+    get:
+      tags:
+        - home
+      summary: Get home's details by home id
+      operationId: getHomeById
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedHome'
+        '404':
+          description: Home not found
+          content: {}
+  /homes/{homeId}/residents/{userId}:
+    put:
+      tags:
+        - home
+      summary: Add resident to home
+      operationId: addResident
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          description: Identifier of user to be associated with home
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content, resident added successfuly
+          content: { }
+#    delete:
+#      tags:
+#        - home
+#      summary: Remove resident from home
+#      operationId: removeResident
+#      parameters:
+#        - name: homeId
+#          description: Identifier of home
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#        - name: userId
+#          description: Identifier of user to be removed from home
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/Resident'
+#      responses:
+#        '204':
+#          description: No content, resident removed successfuly
+#          content: {}
+  /homes/{homeId}/rooms:
+    post:
+      tags:
+        - home
+      summary: Create room
+      operationId: createRoom
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoom'
+      responses:
+        '201':
+          description: Room created successfuly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedRoom'
+  /homes/{homeId}/rooms/{roomId}:
+    get:
+      tags:
+        - home
+      summary: Get room's details by room id
+      operationId: getRoomById
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: roomId
+          description: Identifier of room
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedRoom'
+#    delete:
+#      tags:
+#        - home
+#      summary: Delete room
+#      operationId: deleteRoom
+#      parameters:
+#        - name: homeId
+#          description: Identifier of home
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#        - name: roomId
+#          description: Identifier of room
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#      responses:
+#        '204':
+#          description: No content, room removed successfuly
+#          content: { }
+  /homes/{homeId}/rooms/{roomId}/sensors/{sensorId}:
+    put:
+      tags:
+        - home
+      summary: Add sensor to room
+      operationId: addSensor
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: roomId
+          description: Identifier of room
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: sensorId
+          description: Identifier of sensor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content, sensor added successfuly
+          content: { }
+#    delete:
+#      tags:
+#        - home
+#      summary: Delete sensor from room
+#      operationId: removeSensor
+#      parameters:
+#        - name: homeId
+#          description: Identifier of home
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#        - name: roomId
+#          description: Identifier of room
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#        - name: sensorId
+#          description: Identifier of sensor
+#          in: path
+#          required: true
+#          schema:
+#            type: integer
+#      responses:
+#        '204':
+#          description: No content, sensor removed successfuly
+#          content: { }
+  /sensors:
+    get:
+      tags:
+        - sensor
+      summary: Get all sensors
+      operationId: getSensors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sensor'
+    post:
+      tags:
+        - sensor
+      summary: Create sensor
+      operationId: createSensor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSensor'
+      responses:
+        '201':
+          description: Sensor created successfuly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sensor'
+  /sensors/{sensorId}:
+    get:
+      tags:
+        - sensor
+      summary: Get sensor's details by sensor id
+      operationId: getSensorById
+      parameters:
+        - name: sensorId
+          description: Identifier of sensor
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sensor'
+        '404':
+          description: Sensor not found
+          content: { }
+    put:
+      tags:
+        - sensor
+      summary: Update sensor state
+      operationId: updateSensorState
+      parameters:
+        - name: sensorId
+          description: Identifier of sensor
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSensor'
+      responses:
+        '204':
+          description: No content. Sensor updated successfuly
+          content: {}
+components:
+  schemas:
+    CreateSensor:
+      type: object
+      properties:
+        sensorType:
+          type: string
+        unit:
+          type: string
+    UpdateSensor:
+      type: object
+      properties:
+        measuredValue:
+          type: number
+    Sensor:
+      type: object
+      properties:
+        sensorId:
+          type: integer
+        sensorType:
+          type: string
+        measuredValue:
+          type: number
+        unit:
+          type: string
+    Resident:
+      type: object
+      properties:
+        userId:
+          type: integer
+    CreateRoom:
+      type: object
+      properties:
+        name:
+          type: string
+    DetailedRoom:
+      type: object
+      properties:
+        roomId:
+          type: integer
+        name:
+          type: string
+        sensors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sensor'
+    CreateHome:
+      type: object
+      properties:
+        userId:
+          type: integer
+        name:
+          type: string
+    Home:
+      type: object
+      properties:
+        homeId:
+          type: integer
+        name:
+          type: string
+    DetailedHome:
+      type: object
+      properties:
+        homeId:
+          type: integer
+        name:
+          type: string
+        residents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resident'
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailedRoom'
