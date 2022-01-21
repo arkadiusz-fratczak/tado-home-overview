@@ -13,42 +13,41 @@ import tado.homeoverview.api.model.UpdateSensorStateDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 @Transactional
-public class SensorsController implements SensorsApi {
+public class SensorController implements SensorsApi {
 
-    private final SensorsRepository sensorsRepository;
-    private final SensorsMapper sensorsMapper;
+    private final SensorRepository sensorRepository;
+    private final SensorMapper sensorMapper;
 
     @Override
     public ResponseEntity<SensorDTO> createSensor(CreateSensorDTO createSensorDTO) {
-        var sensor = sensorsRepository.save(sensorsMapper.toSensorEntity(createSensorDTO));
-        return new ResponseEntity<>(sensorsMapper.toSensorDTO(sensor), HttpStatus.CREATED);
+        var sensor = sensorRepository.save(sensorMapper.toSensorEntity(createSensorDTO));
+        return new ResponseEntity<>(sensorMapper.toSensorDTO(sensor), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<List<SensorDTO>> getAllSensors() {
-        var sensors = StreamSupport.stream(sensorsRepository.findAll().spliterator(), false)
-                .map(sensorsMapper::toSensorDTO)
+        var sensors = sensorRepository.findAll().stream()
+                .map(sensorMapper::toSensorDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(sensors);
     }
 
     @Override
     public ResponseEntity<SensorDTO> getSensorById(Long sensorId) {
-        var sensorOpt = sensorsRepository.findById(sensorId);
-        return ResponseEntity.of(sensorOpt.map(sensorsMapper::toSensorDTO));
+        var sensorOpt = sensorRepository.findById(sensorId);
+        return ResponseEntity.of(sensorOpt.map(sensorMapper::toSensorDTO));
     }
 
     @Override
     public ResponseEntity<Void> updateSensorState(Long sensorId, UpdateSensorStateDTO updateSensorStateDTO) {
-        var sensorOpt = sensorsRepository.findById(sensorId);
+        var sensorOpt = sensorRepository.findById(sensorId);
         return sensorOpt
-                .map(s -> sensorsRepository.save(s.withValue(updateSensorStateDTO.getValue())))
+                .map(s -> sensorRepository.save(s.withValue(updateSensorStateDTO.getValue())))
                 .map(s -> ResponseEntity.noContent().<Void>build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -25,6 +25,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
@@ -33,7 +34,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Home'
+                  $ref: '#/components/schemas/HomeDTO'
         '404':
           description: There isn't any home associated with the given resident
           content: {}
@@ -46,14 +47,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateHome'
+              $ref: '#/components/schemas/CreateHomeDTO'
       responses:
         '201':
           description: Home created successfuly
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DetailedHome'
+                $ref: '#/components/schemas/DetailedHomeDTO'
   /homes/{homeId}:
     get:
       tags:
@@ -67,13 +68,14 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DetailedHome'
+                $ref: '#/components/schemas/DetailedHomeDTO'
         '404':
           description: Home not found
           content: {}
@@ -90,12 +92,14 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - name: userId
           description: Identifier of user to be associated with home
           in: path
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '204':
           description: No content, resident added successfuly
@@ -140,18 +144,19 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRoom'
+              $ref: '#/components/schemas/CreateRoomDTO'
       responses:
         '201':
           description: Room created successfuly
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DetailedRoom'
+                $ref: '#/components/schemas/DetailedRoomDTO'
   /homes/{homeId}/rooms/{roomId}:
     get:
       tags:
@@ -165,19 +170,21 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - name: roomId
           description: Identifier of room
           in: path
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DetailedRoom'
+                $ref: '#/components/schemas/DetailedRoomDTO'
   #    delete:
   #      tags:
   #        - home
@@ -213,18 +220,21 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - name: roomId
           description: Identifier of room
           in: path
           required: true
           schema:
             type: integer
+            format: int64
         - name: sensorId
           description: Identifier of sensor
           in: path
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '204':
           description: No content, sensor added successfuly
@@ -370,53 +380,59 @@ components:
           type: number
           format: float
           description: Measured value
-    Resident:
-      type: object
-      properties:
-        userId:
-          type: integer
-    CreateRoom:
+    CreateRoomDTO:
       type: object
       properties:
         name:
           type: string
-    DetailedRoom:
+    DetailedRoomDTO:
       type: object
       properties:
         roomId:
           type: integer
+          format: int64
         name:
           type: string
         sensors:
           type: array
           items:
             $ref: '#/components/schemas/SensorDTO'
-    CreateHome:
+    CreateHomeDTO:
       type: object
       properties:
-        userId:
+        ownerId:
           type: integer
+          format: int64
         name:
           type: string
-    Home:
+    HomeDTO:
       type: object
       properties:
         homeId:
           type: integer
+          format: int64
+        ownerId:
+          type: integer
+          format: int64
         name:
           type: string
-    DetailedHome:
+    DetailedHomeDTO:
       type: object
       properties:
         homeId:
           type: integer
+          format: int64
+        ownerId:
+          type: integer
+          format: int64
         name:
           type: string
         residents:
           type: array
           items:
-            $ref: '#/components/schemas/Resident'
+            type: integer
+            format: int64
         rooms:
           type: array
           items:
-            $ref: '#/components/schemas/DetailedRoom'
+            $ref: '#/components/schemas/DetailedRoomDTO'
