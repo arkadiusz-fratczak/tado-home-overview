@@ -8,10 +8,8 @@ import lombok.With;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "SENSORS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
