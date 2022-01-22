@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "3b40013d-8053-4c8d-988b-ad08975d65ee",
+		"name": "home-overview",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sensors",
+			"item": [
+				{
+					"name": "Create temperature sensor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();",
+									"pm.environment.set(\"tempSensorId\", responseData.sensorId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"valueType\": \"temperature\",\n    \"unit\": \"C\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/sensors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create humidity sensor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();",
+									"pm.environment.set(\"humSensorId\", responseData.sensorId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"valueType\": \"humidity\",\n    \"unit\": \"%\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/sensors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update temperature measurment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": 22.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/sensors/{{tempSensorId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sensors",
+								"{{tempSensorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update humidity measurment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"value\": 54.2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/sensors/{{humSensorId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sensors",
+								"{{humSensorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all sensors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/sensors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"sensors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create home",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"owner\": \"{{homeOwner}}\",\n    \"name\": \"Joe's home\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/homes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get homes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData = pm.response.json();",
+							"pm.environment.set(\"homeId\", responseData[0].homeId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes?userAlias={{homeOwner}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes"
+					],
+					"query": [
+						{
+							"key": "userAlias",
+							"value": "{{homeOwner}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get home by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Merry to home",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}/residents/merry",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}",
+						"residents",
+						"merry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create room",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData = pm.response.json();",
+							"pm.environment.set(\"roomId\", responseData.roomId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Living room\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}/rooms",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add temp sensor to room",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}/rooms/{{roomId}}/sensors/{{tempSensorId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}",
+						"rooms",
+						"{{roomId}}",
+						"sensors",
+						"{{tempSensorId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add humidity sensor to room",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}/rooms/{{roomId}}/sensors/{{humSensorId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}",
+						"rooms",
+						"{{roomId}}",
+						"sensors",
+						"{{humSensorId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get room's details by room id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/homes/{{homeId}}/rooms/{{roomId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"homes",
+						"{{homeId}}",
+						"rooms",
+						"{{roomId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

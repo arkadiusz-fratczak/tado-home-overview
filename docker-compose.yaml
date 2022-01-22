@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+  postgres:
+    image: postgres:14-alpine
+    command: [ "postgres", "-c", "log-statement=all" ]
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=home-overview
+    ports:
+      - 5432:5432
+    networks:
+      - home-overview
+  tado-app:
+    image: tado-home-overview-app:latest
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/home-overview
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - 8080:8080
+    networks:
+      - home-overview
+networks:
+  home-overview:
+    driver: bridge
