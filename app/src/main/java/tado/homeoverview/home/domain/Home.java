@@ -24,12 +24,12 @@ public class Home {
     @GeneratedValue
     private Long id;
 
-    private Long ownerId;
+    private String owner;
 
     private String name;
 
     @ElementCollection
-    private Set<Long> residents = new HashSet<>();
+    private Set<String> residents = new HashSet<>();
 
     @OneToMany(orphanRemoval = true, mappedBy = "home")
     private Set<Room> rooms = new HashSet<>();
@@ -40,8 +40,8 @@ public class Home {
         return this;
     }
 
-    public Home addResident(Long userId) {
-        this.getResidents().add(userId);
+    public Home addResident(String userAlias) {
+        this.getResidents().add(userAlias);
         return this;
     }
 }

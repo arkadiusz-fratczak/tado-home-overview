@@ -19,27 +19,32 @@ public class HomeService {
     private final RoomRepository roomRepository;
     private final SensorRepository sensorRepository;
 
+    public List<Home> getAllHomes() {
+        return homeRepository.findAll();
+    }
+
     public Optional<Home> getHomeById(Long homeId) {
         return homeRepository.findById(homeId);
     }
 
-    public List<Home> getHomesByResidentId(Long residentId) {
-        return homeRepository.findAllByResidentId(residentId);
+    public List<Home> getHomesByResident(String residentId) {
+        return homeRepository.findAllByResident(residentId);
     }
 
     public Home createHome(Home home) {
+        home.getResidents().add(home.getOwner());
         return homeRepository.save(home);
     }
 
-    public Optional<Home> addResident(Long homeId, Long userId) {
+    public Optional<Home> addResident(Long homeId, String userId) {
         return homeRepository.findById(homeId)
                 .map(h -> homeRepository.save(h.addResident(userId)));
     }
 
     public Optional<Room> createRoom(Long homeId, Room room) {
         return homeRepository.findById(homeId).map(h -> {
-            homeRepository.save(h.addRoom(room));
-            return room;
+            room.setHome(h);
+            return roomRepository.save(room);
         });
     }
 

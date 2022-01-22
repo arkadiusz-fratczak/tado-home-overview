@@ -16,16 +16,15 @@ paths:
     get:
       tags:
         - home
-      summary: Get all homes associated with given resident id
-      operationId: getHomesByResidentId
+      summary: Get all homes
+      operationId: getAllHomes
       parameters:
-        - name: residentId
-          description: Identifier of user - resident of home
+        - name: userAlias
+          description: Filter homes to the ones, which owner match with userAlias
           in: query
-          required: true
+          required: false
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: OK
@@ -36,7 +35,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/HomeDTO'
         '404':
-          description: There isn't any home associated with the given resident
+          description: There isn't any home associated with the given user
           content: {}
     post:
       tags:
@@ -79,7 +78,7 @@ paths:
         '404':
           description: Home not found
           content: {}
-  /homes/{homeId}/residents/{userId}:
+  /homes/{homeId}/residents/{userAlias}:
     put:
       tags:
         - home
@@ -93,44 +92,16 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: userId
-          description: Identifier of user to be associated with home
+        - name: userAlias
+          description: Alias of user to be associated with home
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '204':
           description: No content, resident added successfuly
           content: { }
-  #    delete:
-  #      tags:
-  #        - home
-  #      summary: Remove resident from home
-  #      operationId: removeResident
-  #      parameters:
-  #        - name: homeId
-  #          description: Identifier of home
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #        - name: userId
-  #          description: Identifier of user to be removed from home
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #      requestBody:
-  #        content:
-  #          application/json:
-  #            schema:
-  #              $ref: '#/components/schemas/Resident'
-  #      responses:
-  #        '204':
-  #          description: No content, resident removed successfuly
-  #          content: {}
   /homes/{homeId}/rooms:
     post:
       tags:
@@ -185,28 +156,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedRoomDTO'
-  #    delete:
-  #      tags:
-  #        - home
-  #      summary: Delete room
-  #      operationId: deleteRoom
-  #      parameters:
-  #        - name: homeId
-  #          description: Identifier of home
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #        - name: roomId
-  #          description: Identifier of room
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #      responses:
-  #        '204':
-  #          description: No content, room removed successfuly
-  #          content: { }
   /homes/{homeId}/rooms/{roomId}/sensors/{sensorId}:
     put:
       tags:
@@ -239,34 +188,6 @@ paths:
         '204':
           description: No content, sensor added successfuly
           content: { }
-  #    delete:
-  #      tags:
-  #        - home
-  #      summary: Delete sensor from room
-  #      operationId: removeSensor
-  #      parameters:
-  #        - name: homeId
-  #          description: Identifier of home
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #        - name: roomId
-  #          description: Identifier of room
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #        - name: sensorId
-  #          description: Identifier of sensor
-  #          in: path
-  #          required: true
-  #          schema:
-  #            type: integer
-  #      responses:
-  #        '204':
-  #          description: No content, sensor removed successfuly
-  #          content: { }
   /sensors:
     get:
       tags:
@@ -400,9 +321,8 @@ components:
     CreateHomeDTO:
       type: object
       properties:
-        ownerId:
-          type: integer
-          format: int64
+        owner:
+          type: string
         name:
           type: string
     HomeDTO:
@@ -411,9 +331,8 @@ components:
         homeId:
           type: integer
           format: int64
-        ownerId:
-          type: integer
-          format: int64
+        owner:
+          type: string
         name:
           type: string
     DetailedHomeDTO:
@@ -422,16 +341,14 @@ components:
         homeId:
           type: integer
           format: int64
-        ownerId:
-          type: integer
-          format: int64
+        owner:
+          type: string
         name:
           type: string
         residents:
           type: array
           items:
-            type: integer
-            format: int64
+            type: string
         rooms:
           type: array
           items:

@@ -2,6 +2,7 @@ package tado.homeoverview.home;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tado.homeoverview.api.HomesApi;
@@ -12,6 +13,7 @@ import tado.homeoverview.api.model.DetailedRoomDTO;
 import tado.homeoverview.api.model.HomeDTO;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -29,8 +31,10 @@ public class HomeController implements HomesApi {
     }
 
     @Override
-    public ResponseEntity<List<HomeDTO>> getHomesByResidentId(Long residentId) {
-        var homes = homeService.getHomesByResidentId(residentId).stream()
+    public ResponseEntity<List<HomeDTO>> getAllHomes(@Nullable String userAlias) {
+        var homes = Optional.ofNullable(userAlias)
+                .map(ua -> homeService.getHomesByResident(userAlias))
+                .orElseGet(homeService::getAllHomes).stream()
                 .map(homeMapper::toHomeDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(homes);
@@ -43,8 +47,8 @@ public class HomeController implements HomesApi {
     }
 
     @Override
-    public ResponseEntity<Void> addResident(Long homeId, Long userId) {
-        var homeOpt = homeService.addResident(homeId, userId);
+    public ResponseEntity<Void> addResident(Long homeId, String userAlias) {
+        var homeOpt = homeService.addResident(homeId, userAlias);
         return homeOpt.map(h -> ResponseEntity.noContent().<Void>build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
