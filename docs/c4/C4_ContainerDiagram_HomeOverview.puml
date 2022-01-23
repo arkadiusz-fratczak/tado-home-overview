@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/postgresql.puml
+!include FONTAWESOME/server.puml
+!include FONTAWESOME/mobile.puml
+!include FONTAWESOME/temperature_high.puml
+
+title Container diagram for Home Overview System
+
+Person(device_sensor, "Device Sensor", "A device which sends measurement data", "temperature_high")
+Person(tado_user, "Tado User", "A customer of Tado which wants to have a control over climate in his rooms")
+
+System_Boundary(c1, "Home Overview") {
+    Container(spa, "Web App", "JavaScript, Angular", "Provides web browser access to customer climate data", "angular")
+    Container(mobile_app, "Mobile App", "Kotlin, Swift", "Provides mobile access to customer climate data", "mobile")
+    Container(backend_api, "API Application", "Java, Docker Container", "Provides home's climate management functionality via API", "server")
+    ContainerDb(database, "Database", "SQL Database", "Stores user home data, sensors data", "postgresql")
+}
+
+Lay_U(backend_api, device_sensor)
+
+Rel(device_sensor, backend_api, "Uses", "REST/HTTPS")
+Rel(tado_user, spa, "Uses", "HTTPS")
+Rel(tado_user, mobile_app, "Uses")
+
+Rel(spa, backend_api, "Uses", "REST/HTTPS")
+Rel(mobile_app, backend_api, "Uses", "REST/HTTPS")
+Rel_Neighbor(backend_api, database, "Reads from and writes to", "JDBC")
+
+@enduml

@@ -1,13 +1,17 @@
 ## Home overview prototype
 The goal of this project is to provide a prototype for a backend application for home climate management.
-User can create the home abstraction, which allows to check the current state of his rooms.  
+User can define rooms and assigns sensors to them, to check the current climate in his home.  
 
-**This application is NOT production ready!**
+[C4 Container Diagram](docs/c4/C4_ContainerDiagram_HomeOverview.puml)  
+![C4 Container Diagram](docs/c4/C4_ContainerDiagram_HomeOverview-Container_diagram_for_Home_Overview_System.png)
 
 ### Application architecture
 Application follows Small Monolith approach to quickly validate the ideas and to reduce the time
 needed for development of new user stories. After finalizing the main feature list, it can be refactored to
 different architecture style if needed.
+
+[C4 Component Diagram](docs/c4/C4_ComponentDiagram_HomeOverview.puml)  
+![C4 Component Diagram](docs/c4/C4_ComponentDiagram_HomeOverview-Component_diagram_for_Home_Overview_System___API_Application.png)
 
 ### Application API
 API interface was specified in OpenAPI Specification format. You can find it [here](api/src/main/resources/home-overview-api.yaml)

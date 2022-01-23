@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+HIDE_PERSON_SPRITE()
+'LAYOUT_LANDSCAPE()
+
+title Component diagram for Home Overview System - API Application
+
+Person(device_sensor, "Device Sensor", "A device which sends measurement data")
+Container(web, "Web App", "JavaScript, Angular", "Provides web browser access to customer climate data")
+Container(ma, "Mobile App", "Kotlin, Swift", "Provides mobile access to customer climate data", "mobile")
+ContainerDb(db, "Database", "SQL Database", "Stores user home data, sensors data", "postgresql")
+
+Container_Boundary(api, "API Application") {
+    Component(sensor, "Sensor Controller", "Spring Rest Controller", "Allows sensors to send measurement data")
+    Component(sensor_repo, "Sensor Repository", "Spring Repository", "CRUD for Sensor domain")
+    Component(home, Home Controller", "Spring Rest Controller", "Allows customers to manage home and rooms and get climate data")
+    Component(home_service, "Home Service", "Spring Service", "Business logic operations related with climate data")
+    Component(home_repo, "Home Repository", "Spring Repository", "CRUD for Home domain")
+
+    Rel(sensor, sensor_repo, "Uses")
+    Rel(home, home_service, "Uses")
+    Rel(home_service, home_repo, "Uses")
+    Rel(home_service, sensor_repo, "Uses")
+    Rel(sensor_repo, db, "Read/Write", "JDBC")
+    Rel(home_repo, db, "Read/Write", "JDBC")
+}
+
+Rel(device_sensor, sensor, "Uses", "REST/HTTPS")
+Rel(web, home, "Uses", "REST/HTTPS")
+Rel(ma, home, "Uses", "REST/HTTPS")
+@enduml

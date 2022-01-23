@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/temperature_high.puml
+
+title System Context diagram for Home Overview Prototype
+
+Person(device_sensor, "Device Sensor", "A device which sends measurement data", "temperature_high")
+Person(tado_user, "Tado User", "A customer of Tado which wants to have a control over climate in his rooms")
+System(home_overview, "Home Overview", "Allows customers to get the overview of theirs home's climate")
+
+
+Rel(device_sensor, home_overview, "Sends measurement data")
+Rel(tado_user, home_overview, "Gets climate data")
+@enduml
