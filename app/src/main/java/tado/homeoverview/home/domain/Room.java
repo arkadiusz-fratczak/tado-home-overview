@@ -1,9 +1,11 @@
 package tado.homeoverview.home.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import tado.homeoverview.sensors.domain.Sensor;
 
 import javax.persistence.Entity;
@@ -18,11 +20,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
+@With
 @NoArgsConstructor
 @AllArgsConstructor
 public class Room {
+
+    public Room(Long id) {
+        this.id = id;
+    }
 
     @Id
     @GeneratedValue
@@ -35,9 +41,13 @@ public class Room {
             name = "room_sensors",
             joinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "sensor_id", referencedColumnName = "id"))
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Sensor> sensors = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Home home;
 
     public Room addSensor(Sensor sensor) {

@@ -1,6 +1,7 @@
 package tado.homeoverview.home;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class HomeController implements HomesApi {
     @Override
     public ResponseEntity<DetailedHomeDTO> createHome(CreateHomeDTO createHomeDTO) {
         var home = homeService.createHome(homeMapper.toHomeEntity(createHomeDTO));
-        return ResponseEntity.ok(homeMapper.toDetailedHomeDTO(home));
+        return new ResponseEntity<>(homeMapper.toDetailedHomeDTO(home), HttpStatus.CREATED);
     }
 
     @Override
@@ -56,7 +57,8 @@ public class HomeController implements HomesApi {
     @Override
     public ResponseEntity<DetailedRoomDTO> createRoom(Long homeId, CreateRoomDTO createRoomDTO) {
         var roomOpt = homeService.createRoom(homeId, homeMapper.toRoomEntity(createRoomDTO));
-        return ResponseEntity.of(roomOpt.map(homeMapper::toDetailedRoomDTO));
+        return roomOpt.map(r -> new ResponseEntity<>(homeMapper.toDetailedRoomDTO(r), HttpStatus.CREATED))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override

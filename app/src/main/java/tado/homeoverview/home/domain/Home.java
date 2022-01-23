@@ -1,9 +1,11 @@
 package tado.homeoverview.home.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,11 +16,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
+@With
 @NoArgsConstructor
 @AllArgsConstructor
 public class Home {
+
+    public Home(Long id) {
+        this.id = id;
+    }
 
     @Id
     @GeneratedValue
@@ -32,6 +38,8 @@ public class Home {
     private Set<String> residents = new HashSet<>();
 
     @OneToMany(orphanRemoval = true, mappedBy = "home")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Room> rooms = new HashSet<>();
 
     public Home addRoom(Room room) {

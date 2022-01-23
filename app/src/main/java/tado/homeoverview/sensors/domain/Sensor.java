@@ -1,9 +1,8 @@
 package tado.homeoverview.sensors.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.With;
 
 import javax.persistence.Entity;
@@ -11,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
-@Setter
+@Data
+@With
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sensor {
@@ -29,6 +28,5 @@ public class Sensor {
 
     private String unit;
 
-    @With
     private Float value;
 }
