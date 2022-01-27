@@ -223,6 +223,40 @@ paths:
         '404':
           description: Home or room not found
           content: { }
+    put:
+      tags:
+        - home
+      summary: Updates expected temperature in the room
+      operationId: updateRoomExpectedTemperature
+      parameters:
+        - name: homeId
+          description: Identifier of home
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: roomId
+          description: Identifier of room
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 12
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoomDTO'
+      responses:
+        '204':
+          description: No content, room updated succesfully
+          content: { }
+        '404':
+          description: Room or sensor not found
+          content: { }
   /homes/{homeId}/rooms/{roomId}/sensors/{sensorId}:
     put:
       tags:
@@ -409,6 +443,12 @@ components:
       properties:
         name:
           type: string
+    UpdateRoomDTO:
+      type: object
+      properties:
+        expectedTemperature:
+          type: number
+          format: float
     DetailedRoomDTO:
       type: object
       properties:
@@ -417,6 +457,9 @@ components:
           format: int64
         name:
           type: string
+        expectedTemperature:
+          type: number
+          format: float
         sensors:
           type: array
           items:

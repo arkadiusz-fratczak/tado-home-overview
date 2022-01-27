@@ -36,6 +36,8 @@ public class Room {
 
     private String name;
 
+    private Float expectedTemperature;
+
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "room_sensors",
@@ -53,5 +55,9 @@ public class Room {
     public Room addSensor(Sensor sensor) {
         this.getSensors().add(sensor);
         return this;
+    }
+
+    public Float getExpectedTemperature() {
+        return expectedTemperature;
     }
 }

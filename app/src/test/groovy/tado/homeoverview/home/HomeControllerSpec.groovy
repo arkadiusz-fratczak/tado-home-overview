@@ -81,7 +81,6 @@ class HomeControllerSpec extends Specification {
             serviceResponse                                                     | status
             Optional.of(new Home(1L, "Joe", "name", Set.of("Merry"), Set.of())) | HttpStatus.NO_CONTENT.value()
             Optional.empty()                                                    | HttpStatus.NOT_FOUND.value()
-
     }
 
     def 'should create room'() {
@@ -97,9 +96,9 @@ class HomeControllerSpec extends Specification {
             1 * homeService.createRoom(1L, { it.name == "Bedroom" }) >> serviceResponse
             response.getStatus() == status
         where:
-            serviceResponse                                              | status
-            Optional.of(new Room(1L, "Bedroom", Set.of(), new Home(1L))) | HttpStatus.CREATED.value()
-            Optional.empty()                                             | HttpStatus.NOT_FOUND.value()
+            serviceResponse                                                    | status
+            Optional.of(new Room(1L, "Bedroom", 22.4, Set.of(), new Home(1L))) | HttpStatus.CREATED.value()
+            Optional.empty()                                                   | HttpStatus.NOT_FOUND.value()
     }
 
     def 'should assign sensor to room'() {
@@ -116,14 +115,14 @@ class HomeControllerSpec extends Specification {
             response.getStatus() == status
         where:
             serviceResponse                                                            | status
-            Optional.of(new Room(1L, "Bedroom", Set.of(new Sensor(1L)), new Home(1L))) | HttpStatus.NO_CONTENT.value()
+            Optional.of(new Room(1L, "Bedroom", 22.4, Set.of(new Sensor(1L)), new Home(1L))) | HttpStatus.NO_CONTENT.value()
             Optional.empty()                                                           | HttpStatus.NOT_FOUND.value()
     }
 
     def 'should get home details by home ID'() {
         given:
             def existingSensor = new Sensor(123L, "TEMP", "CELSIUS", 21.4)
-            def existingRoom = new Room(12L, "Bedroom", Set.of(existingSensor), new Home(1L))
+            def existingRoom = new Room(12L, "Bedroom", 22.4, Set.of(existingSensor), new Home(1L))
             def existingHome = new Home(1L, "Joe", "Joe's home", Set.of("Joe"), Set.of(existingRoom))
             homeService.getHomeById(1L) >> Optional.of(existingHome)
         when:
@@ -146,7 +145,7 @@ class HomeControllerSpec extends Specification {
     def 'should get room details'() {
         given:
             def existingSensor = new Sensor(123L, "TEMP", "CELSIUS", 21.4)
-            def existingRoom = new Room(12L, "Bedroom", Set.of(existingSensor), new Home(1L))
+            def existingRoom = new Room(12L, "Bedroom", 22.4, Set.of(existingSensor), new Home(1L))
             homeService.getRoomById(1L, 12L) >> Optional.of(existingRoom)
         when:
             def response = mvc.perform(get("${HOME_ENDPOINT}/1/rooms/${existingRoom.id}"))

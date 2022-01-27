@@ -12,6 +12,7 @@ import tado.homeoverview.api.model.CreateRoomDTO;
 import tado.homeoverview.api.model.DetailedHomeDTO;
 import tado.homeoverview.api.model.DetailedRoomDTO;
 import tado.homeoverview.api.model.HomeDTO;
+import tado.homeoverview.api.model.UpdateRoomDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,13 @@ public class HomeController implements HomesApi {
     @Override
     public ResponseEntity<Void> addSensor(Long homeId, Long roomId, Long sensorId) {
         var roomOpt = homeService.addSensorToRoom(homeId, roomId, sensorId);
+        return roomOpt.map(h -> ResponseEntity.noContent().<Void>build())
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<Void> updateRoomExpectedTemperature(Long homeId, Long roomId, UpdateRoomDTO updateRoomDTO) {
+        var roomOpt = homeService.updateRoomExpectedTemperature(homeId, roomId, updateRoomDTO.getExpectedTemperature());
         return roomOpt.map(h -> ResponseEntity.noContent().<Void>build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

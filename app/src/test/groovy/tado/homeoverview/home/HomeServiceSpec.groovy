@@ -26,7 +26,7 @@ class HomeServiceSpec extends Specification {
 
     def "should create room only if home exists"() {
         given:
-            def roomToCreate = new Room(null, "room", Set.of(), null)
+            def roomToCreate = new Room(null, "room", 22.4, Set.of(), null)
             roomRepository.save(_ as Room) >> { Room room -> room.withId(12L) }
             homeRepository.findById(1L) >> Optional.of(new Home(1L, "Joe", "Joe's home", new HashSet<>(), new HashSet<Room>()))
             homeRepository.findById(2L) >> Optional.empty()
@@ -38,7 +38,7 @@ class HomeServiceSpec extends Specification {
     def "should attach sensor to room only if all entities exist"() {
         given:
             roomRepository.save(_ as Room) >> { Room room -> room.withId(12L) }
-            roomRepository.findRoomAssociatedWithHomeById(1L, 12L) >> Optional.of(new Room(1L, "Bedroom", new HashSet<>(), new Home(1L)))
+            roomRepository.findRoomAssociatedWithHomeById(1L, 12L) >> Optional.of(new Room(1L, "Bedroom", 22.4, new HashSet<>(), new Home(1L)))
             roomRepository.findRoomAssociatedWithHomeById(1L, 13L) >> Optional.empty()
             sensorRepository.findById(123L) >> Optional.of(new Sensor(123L))
             sensorRepository.findById(321L) >> Optional.empty()

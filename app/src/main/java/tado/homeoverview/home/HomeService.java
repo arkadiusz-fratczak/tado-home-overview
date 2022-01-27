@@ -60,4 +60,10 @@ public class HomeService {
         }
         return Optional.empty();
     }
+
+    public Optional<Room> updateRoomExpectedTemperature(Long homeId, Long roomId, Float expectedTemperature) {
+        return roomRepository.findRoomAssociatedWithHomeById(homeId, roomId)
+                .map(r -> r.withExpectedTemperature(expectedTemperature))
+                .map(roomRepository::save);
+    }
 }
